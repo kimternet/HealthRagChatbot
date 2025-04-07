@@ -7,11 +7,21 @@ import { Message } from "ai";
 import PromptSuggestionRow from "./components/PromptSuggestionRow";
 import LoadingBubble from "./components/LoadingBubble";
 import Bubble from "./components/Bubble";
+import { useEffect, useRef } from "react";
 
 const Home = () => {
     const { append, isLoading, messages, input, handleInputChange, handleSubmit, stop } = useChat();
+    const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const noMessages = !messages || messages.length === 0;
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages, isLoading]);
 
     const handlePrompt = (promptText: string) => {
         const msg: Message = {
@@ -63,6 +73,7 @@ const Home = () => {
                             />
                         ))}
                         {isLoading && <LoadingBubble />}
+                        <div ref={messagesEndRef} />
                     </>
                 )}
             </section>

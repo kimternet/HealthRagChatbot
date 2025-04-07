@@ -50,10 +50,31 @@ section {
 
 section.populated {
     height: 100%;
+    max-height: calc(80vh - 140px);
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    overflow: scroll;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    padding: 10px 5px;
+    scroll-behavior: smooth;
+}
+
+section.populated::-webkit-scrollbar {
+    width: 6px;
+}
+
+section.populated::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+section.populated::-webkit-scrollbar-thumb {
+    background: rgba(255, 192, 192, 0.4);
+    border-radius: 10px;
+}
+
+section.populated::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 192, 192, 0.6);
 }
 
 .starter-text {
