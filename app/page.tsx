@@ -22,6 +22,22 @@ const Home = () => {
         append(msg);
     };
 
+    const handleContinue = async (messageContent: string) => {
+        const continueMsg: Message = {
+            id: crypto.randomUUID(),
+            content: "이전 답변을 이어서 계속 설명해주세요.",
+            role: "user"
+        };
+        
+        const context: Message = {
+            id: crypto.randomUUID(),
+            content: messageContent,
+            role: "assistant"
+        };
+
+        append(continueMsg, { options: { body: { messages: [context] } } });
+    };
+
     return (
         <main>
             <Image src={healthlogo} width={250} alt="healthlogo" />
@@ -43,6 +59,7 @@ const Home = () => {
                                 message={message}
                                 isLoading={isLoading && index === messages.length - 1}
                                 onStopGenerating={stop}
+                                onContinueGenerating={() => handleContinue(message.content)}
                             />
                         ))}
                         {isLoading && <LoadingBubble />}
