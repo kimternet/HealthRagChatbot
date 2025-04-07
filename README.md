@@ -46,7 +46,7 @@
 
 2. **웹 스크래핑 안정성**
    - 문제: 동적 로딩 콘텐츠 수집 어려움
-   - 해결: Puppeteer를 사용하여 JavaScript 렌더링 후 콘텐츠 수집
+   - 해결: Puppeteer를 사용하여 JavaScript 렌더링 후 콘텐츠 수집 
 
 
 ## 🚀 실행 방법
@@ -94,3 +94,7 @@ ASTRA_DB_API_ENDPOINT=your_astra_endpoint
 ASTRA_DB_NAMESPACE=your_namespace
 ASTRA_DB_COLLECTION=your_collection
 ```
+## 🛜
+https://platform.openai.com/
+https://astra.datastax.com/
+https://sdk.vercel.ai/docs
