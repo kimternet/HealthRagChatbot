@@ -2,6 +2,8 @@
 
 건강 관련 정보를 제공하는 RAG(Retrieval-Augmented Generation) 기반 AI 챗봇입니다. 신뢰할 수 있는 건강 정보 웹사이트들의 데이터를 기반으로 사용자의 질문에 답변합니다.
 
+![Image](https://github.com/user-attachments/assets/209b8ae8-1ca1-4cb2-abcf-faf9afb09cad)
+
 ## 🛠 사용된 기술
 
 - **Frontend**
