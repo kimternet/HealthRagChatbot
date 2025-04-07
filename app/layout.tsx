@@ -1,9 +1,13 @@
+import type { Metadata } from "next";
 import "./global.css"
 import { ReactNode } from "react"
 
-export const metadata = {
+export const metadata: Metadata = {
     title: "Health RAG Chatbot",
-    description: "건강을 지킵시다!"
+    description: "AI-powered health information chatbot using RAG",
+    icons: {
+        icon: "/favicon.ico"
+    }
 }
 
 const RootLayout = ({ children }: { children: ReactNode }) => {

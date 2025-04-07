@@ -15,6 +15,17 @@ export async function POST(req: Request) {
             ASTRA_DB_APPLICATION_TOKEN,
         } = process.env
 
+        // 환경 변수 체크
+        if (!ASTRA_DB_APPLICATION_TOKEN || !ASTRA_DB_API_ENDPOINT || !ASTRA_DB_NAMESPACE || !ASTRA_DB_COLLECTION) {
+            console.error("Missing environment variables:", {
+                hasToken: !!ASTRA_DB_APPLICATION_TOKEN,
+                hasEndpoint: !!ASTRA_DB_API_ENDPOINT,
+                hasNamespace: !!ASTRA_DB_NAMESPACE,
+                hasCollection: !!ASTRA_DB_COLLECTION
+            })
+            throw new Error("Required environment variables are missing")
+        }
+
         // Astra DB 클라이언트를 런타임에 초기화
         const client = new DataAPIClient(ASTRA_DB_APPLICATION_TOKEN)
         const db = client.db(ASTRA_DB_API_ENDPOINT, { namespace: ASTRA_DB_NAMESPACE })
@@ -22,15 +33,19 @@ export async function POST(req: Request) {
         const { messages } = await req.json()
         const latestMessage = messages[messages?.length - 1]?.content
 
+        if (!latestMessage) {
+            throw new Error("No message content provided")
+        }
+
         let docContext = ""
 
-        const embedding = await openai.embeddings.create({
-            model: "text-embedding-3-small",
-            input: latestMessage,
-            encoding_format: "float"
-        })
-
         try {
+            const embedding = await openai.embeddings.create({
+                model: "text-embedding-3-small",
+                input: latestMessage,
+                encoding_format: "float"
+            })
+
             const collection = await db.collection(ASTRA_DB_COLLECTION)
             const cursor = collection.find(null, {
                 sort: {
@@ -44,7 +59,7 @@ export async function POST(req: Request) {
             docContext = JSON.stringify(docsMap)
 
         } catch (err) {
-            console.log("Error querying db:", err)
+            console.error("Database or embedding error:", err)
             docContext = ""
         }
 
@@ -83,7 +98,10 @@ export async function POST(req: Request) {
         return new StreamingTextResponse(stream)
     } catch (err) {
         console.error("API Error:", err)
-        return new Response(JSON.stringify({ error: "Internal Server Error" }), {
+        return new Response(JSON.stringify({ 
+            error: "Internal Server Error", 
+            details: err instanceof Error ? err.message : "Unknown error"
+        }), {
             status: 500,
             headers: { 'Content-Type': 'application/json' }
         })
