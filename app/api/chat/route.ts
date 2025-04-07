@@ -87,14 +87,8 @@ export async function POST(req: Request) {
             stream: true
         })
 
-        // vercel AI 와 OpenAI의 응답 타임이 SDK가 다르기 때문에 이렇게 처리해야함
-        // 하지만 실제 런타임에서는 두 타입 모두 같은 구조의 스트림 데이터를 다루기 때문에 정상 작동한다.
-        // "타입 시스템의 제한"으로 인한 것이며, 실제 기능상의 문제는 아니다.
-        // 즉, TS가 타입을 엄격하게 체크하는 과정에서 발생하는 것이며, 실제 데이터의 구조와 흐름은 정상적이기 때문에 코드가 작동된다.
-
-
+        // @ts-ignore - OpenAI 응답과 Vercel AI SDK 타입 호환성 문제 해결
         const stream = OpenAIStream(response)
-
 
         return new StreamingTextResponse(stream)
     } catch (err) {
