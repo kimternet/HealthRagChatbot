@@ -294,13 +294,39 @@ input: focus {
     color: #444;
 }
 
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 157, 152, 0.4);
+        transform: scale(1);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(255, 157, 152, 0);
+        transform: scale(1.02);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 157, 152, 0);
+        transform: scale(1);
+    }
+}
+
 .continue-button {
-    background: rgba(255, 228, 228, 0.9);
+    background: linear-gradient(135deg, #ffd1d1 0%, #ffb6b6 100%);
+    color: #383838;
+    border: 1px solid rgba(255, 157, 152, 0.5);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 10px rgba(255, 157, 152, 0.3);
+    font-weight: 500;
 }
 
 .continue-button:hover {
-    background: rgba(255, 192, 192, 0.3);
-    color: #444;
+    background: linear-gradient(135deg, #ffb6b6 0%, #ff9d98 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 157, 152, 0.4);
 }
 
 @media screen and (max-width: 768px) {
