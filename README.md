@@ -2,6 +2,10 @@
 
 건강 관련 정보를 제공하는 RAG(Retrieval-Augmented Generation) 기반 AI 챗봇입니다. 신뢰할 수 있는 건강 정보 웹사이트들의 데이터를 기반으로 사용자의 질문에 답변합니다.
 
+## 데모
+
+[라이브 데모 사이트](https://health-rag-chatbot.vercel.app/)
+
 ### [Web]
 
 ![Image](https://github.com/user-attachments/assets/54f46246-d2dc-4ac1-ba5d-1d4693fc19d8)
