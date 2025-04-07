@@ -1,26 +1,23 @@
 import OpenAI from "openai"
-
-import { OpenAIStream, StreamingTextResponse, streamText } from 'ai';
+import { OpenAIStream, StreamingTextResponse } from 'ai';
 import { DataAPIClient } from "@datastax/astra-db-ts"
 
-
-const {
-    ASTRA_DB_NAMESPACE,
-    ASTRA_DB_COLLECTION,
-    ASTRA_DB_API_ENDPOINT,
-    ASTRA_DB_APPLICATION_TOKEN,
-    OPENAI_API_KEY
-} =  process.env
-
 const openai = new OpenAI({
-    apiKey: OPENAI_API_KEY
+    apiKey: process.env.OPENAI_API_KEY
 })
-
-const client = new DataAPIClient(ASTRA_DB_APPLICATION_TOKEN)
-const db = client.db(ASTRA_DB_API_ENDPOINT, { namespace: ASTRA_DB_NAMESPACE })
 
 export async function POST(req: Request) {
     try {
+        const {
+            ASTRA_DB_NAMESPACE,
+            ASTRA_DB_COLLECTION,
+            ASTRA_DB_API_ENDPOINT,
+            ASTRA_DB_APPLICATION_TOKEN,
+        } = process.env
+
+        // Astra DB 클라이언트를 런타임에 초기화
+        const client = new DataAPIClient(ASTRA_DB_APPLICATION_TOKEN)
+        const db = client.db(ASTRA_DB_API_ENDPOINT, { namespace: ASTRA_DB_NAMESPACE })
 
         const { messages } = await req.json()
         const latestMessage = messages[messages?.length - 1]?.content
@@ -28,36 +25,30 @@ export async function POST(req: Request) {
         let docContext = ""
 
         const embedding = await openai.embeddings.create({
-
             model: "text-embedding-3-small",
             input: latestMessage,
             encoding_format: "float"
-
         })
 
         try {
             const collection = await db.collection(ASTRA_DB_COLLECTION)
-            const cursor =collection.find(null, {
-                sort : {
+            const cursor = collection.find(null, {
+                sort: {
                     $vector: embedding.data[0].embedding,
                 },
                 limit: 10
             })
 
             const documents = await cursor.toArray()
-
             const docsMap = documents?.map(doc => doc.text)
-
             docContext = JSON.stringify(docsMap)
 
-  
-        }catch (err) {
-            console.log("Error querring db ")
+        } catch (err) {
+            console.log("Error querying db:", err)
             docContext = ""
         }
 
         const template = {
-
             role: "system",
             content: `You are an advanced healthcare and medical AI assistant with expertise in various health-related topics. Your role is to:
 
@@ -77,7 +68,6 @@ export async function POST(req: Request) {
             - Cite relevant sources when available
             - Emphasize the importance of consulting healthcare professionals for specific medical advice
             - Maintain a professional yet approachable tone`
-
         }
 
         const response = await openai.chat.completions.create({
@@ -92,6 +82,10 @@ export async function POST(req: Request) {
 
         return new StreamingTextResponse(stream)
     } catch (err) {
-        throw err
+        console.error("API Error:", err)
+        return new Response(JSON.stringify({ error: "Internal Server Error" }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' }
+        })
     }
 }
