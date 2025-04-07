@@ -43,7 +43,7 @@ const Bubble = ({
                     )}
                     {!isLoading && isIncomplete(message.content) && onContinueGenerating && (
                         <button onClick={onContinueGenerating} className="continue-button">
-                            계속하기
+                            계속 생성
                         </button>
                     )}
                 </div>
