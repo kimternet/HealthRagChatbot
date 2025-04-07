@@ -5,6 +5,7 @@ import { ReactNode } from "react"
 export const metadata: Metadata = {
     title: "Health RAG Chatbot",
     description: "AI-powered health information chatbot using RAG",
+    viewport: "width=device-width, initial-scale=1, maximum-scale=1",
     icons: {
         icon: "/favicon.ico"
     }

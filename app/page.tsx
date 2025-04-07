@@ -8,23 +8,20 @@ import PromptSuggestionRow from "./components/PromptSuggestionRow";
 import LoadingBubble from "./components/LoadingBubble";
 import Bubble from "./components/Bubble";
 
-
 const Home = () => {
+    const { append, isLoading, messages, input, handleInputChange, handleSubmit, stop } = useChat();
 
-    const {append, isLoading, messages, input, handleInputChange, handleSubmit } = useChat()
+    const noMessages = !messages || messages.length === 0;
 
-    const noMessages = !messages || messages.length === 0
-
-    const handlePrompt = ( promptText ) => {
-
+    const handlePrompt = (promptText: string) => {
         const msg: Message = {
             id: crypto.randomUUID(),
             content: promptText,
             role: "user"
-        }
-        append(msg)
-    }
-    
+        };
+        append(msg);
+    };
+
     return (
         <main>
             <Image src={healthlogo} width={250} alt="healthlogo" />
@@ -32,28 +29,37 @@ const Home = () => {
                 {noMessages ? (
                     <>
                         <p className="starter-text">
-                            ❣️건강은 우리 모두의 것입니다.😊❣️<br/>
+                            ❣️건강은 우리 모두의 것입니다.😊❣️<br />
                             ❣️건강에 관련된 질문을 물어보세요‼️❣️
                         </p>
-                        <br/>
+                        <br />
                         <PromptSuggestionRow onPromptClick={handlePrompt} />
                     </>
-
                 ) : (
                     <>
-                        {messages.map((message, index) => <Bubble key={`message-${index}`} message={message}/>)}
+                        {messages.map((message, index) => (
+                            <Bubble 
+                                key={`message-${index}`} 
+                                message={message}
+                                isLoading={isLoading && index === messages.length - 1}
+                                onStopGenerating={stop}
+                            />
+                        ))}
                         {isLoading && <LoadingBubble />}
                     </>
-
                 )}
-                
             </section>
             <form onSubmit={handleSubmit}>
-                    <input className="question-box" onChange={handleInputChange} value={input} placeholder="무엇이든 물어보세요!"/>
-                    <input type="submit"/>
-                </form>
+                <input
+                    className="question-box"
+                    onChange={handleInputChange}
+                    value={input}
+                    placeholder="무엇이든 물어보세요!"
+                />
+                <input type="submit" value={isLoading ? "중지" : "제출"} onClick={isLoading ? stop : undefined} />
+            </form>
         </main>
-    )
-}
+    );
+};
 
 export default Home;

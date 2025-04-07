@@ -153,17 +153,47 @@ input: focus {
 }
 
 .bubble {
+    max-width: 85%;
     margin: 12px;
     padding: 20px 25px;
-    font-size: 16px;
+    border-radius: 20px;
     line-height: 1.8;
-    border: none;
-    color: #2c2c2c;
-    width: 85%;
-    text-align: left;
     white-space: pre-wrap;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
+    word-wrap: break-word;
     position: relative;
+}
+
+.bubble.user {
+    margin-left: auto;
+    background: linear-gradient(to right, rgba(255, 228, 228, 0.7), rgba(255, 214, 214, 0.7));
+    border: 1px solid rgba(255, 182, 182, 0.3);
+    color: #2c2c2c;
+}
+
+.bubble.assistant {
+    margin-right: auto;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.85), rgba(255, 245, 245, 0.85));
+    border: 1px solid rgba(255, 192, 192, 0.2);
+    backdrop-filter: blur(8px);
+    color: #2c2c2c;
+}
+
+.bubble .paragraph {
+    margin: 0.8em 0;
+}
+
+.bubble .list {
+    margin: 1em 0;
+    padding-left: 1.5em;
+}
+
+.bubble .list-item {
+    margin: 0.5em 0;
+}
+
+.bubble .bold {
+    color: #ff6b6b;
+    font-weight: 600;
 }
 
 .bubble p {
@@ -183,22 +213,6 @@ input: focus {
 .bubble strong, .bubble b {
     color: #ff9eb5;
     font-weight: 600;
-}
-
-.bubble.user {
-    border-radius: 20px 20px 0 20px;
-    background: linear-gradient(135deg, rgba(255, 228, 228, 0.7) 0%, rgba(255, 214, 214, 0.7) 100%);
-    margin-left: auto;
-    border: 1px solid rgba(255, 192, 192, 0.3);
-    backdrop-filter: blur(8px);
-}
-
-.bubble.assistant {
-    border-radius: 20px 20px 20px 0;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 245, 245, 0.85) 100%);
-    margin-right: auto;
-    border: 1px solid rgba(255, 228, 228, 0.4);
-    backdrop-filter: blur(8px);
 }
 
 .bubble a {
@@ -252,5 +266,141 @@ input: focus {
     66% {
         background-position: 0% 50%, 50% 50%, 100% 50%;
         background-size: calc(100%/3) 100%, calc(100%/3) 100%, calc(100%/3) 0%;
+    }
+}
+
+.stop-button {
+    position: absolute;
+    bottom: -25px;
+    right: 10px;
+    padding: 5px 12px;
+    font-size: 12px;
+    color: #666;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 192, 192, 0.3);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.stop-button:hover {
+    background: rgba(255, 192, 192, 0.2);
+    color: #444;
+}
+
+@media screen and (max-width: 768px) {
+    main {
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+        padding: 15px;
+    }
+
+    .starter-text {
+        padding: 0 20px;
+        font-size: 1em;
+    }
+
+    .prompt-suggestions {
+        padding: 0 10px;
+    }
+
+    .prompt-button {
+        padding: 8px 15px;
+        font-size: 0.85em;
+        max-width: 200px;
+    }
+
+    .bubble {
+        max-width: 90%;
+        margin: 8px;
+        padding: 15px 20px;
+        font-size: 0.95em;
+    }
+
+    .bubble.assistant::before {
+        left: -25px;
+        font-size: 16px;
+    }
+
+    .bubble.user::after {
+        right: -25px;
+        font-size: 16px;
+    }
+
+    form {
+        padding: 15px;
+        min-height: 50px;
+    }
+
+    input.question-box {
+        width: 80%;
+        height: 40px;
+        font-size: 14px;
+    }
+
+    input[type=submit] {
+        width: 60px;
+        height: 40px;
+        font-size: 14px;
+    }
+
+    .stop-button {
+        bottom: -20px;
+        right: 5px;
+        padding: 4px 10px;
+        font-size: 11px;
+    }
+
+    section.populated {
+        margin-bottom: 10px;
+    }
+
+    /* 스크롤바 스타일링 */
+    section.populated::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    section.populated::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    section.populated::-webkit-scrollbar-thumb {
+        background: rgba(255, 192, 192, 0.3);
+        border-radius: 3px;
+    }
+}
+
+/* 작은 모바일 화면 대응 */
+@media screen and (max-width: 480px) {
+    .bubble {
+        max-width: 95%;
+        margin: 6px;
+        padding: 12px 16px;
+        font-size: 0.9em;
+    }
+
+    .bubble.assistant::before,
+    .bubble.user::after {
+        display: none;
+    }
+
+    .starter-text {
+        padding: 0 10px;
+        font-size: 0.9em;
+    }
+
+    form {
+        padding: 10px;
+    }
+
+    input.question-box {
+        width: 75%;
+    }
+
+    .prompt-button {
+        padding: 6px 12px;
+        font-size: 0.8em;
+        max-width: 150px;
     }
 }
