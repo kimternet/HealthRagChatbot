@@ -89,11 +89,19 @@ ${docContext}
             model: "gpt-4",
             messages: [template, ...messages],
             temperature: 0.7,
-            stream: true
+            stream: true,
+            max_tokens: 2000,  // 최대 토큰 수 설정
+            presence_penalty: 0.1,  // 반복을 줄이기 위한 페널티
+            frequency_penalty: 0.1,  // 반복을 줄이기 위한 페널티
         })
 
         // @ts-ignore - OpenAI 응답과 Vercel AI SDK 타입 호환성 문제 해결
-        const stream = OpenAIStream(response)
+        const stream = OpenAIStream(response, {
+            onCompletion: async (completion: string) => {
+                // 응답이 완료되었을 때의 처리
+                console.log("Completed response:", completion);
+            },
+        })
 
         return new StreamingTextResponse(stream)
     } catch (err) {
